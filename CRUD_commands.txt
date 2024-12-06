@@ -1,0 +1,103 @@
+use dac
+db.students.insert({user_id:"abc123",age:55,status:"A"})
+db.students.insert({user_id:"xyz123",age:45,status:"B"})
+db.students.insert({user_id:"pqr123",age:30,status:"D"})
+db.students.update({},{$set:{join_date:new Date()}},{multi:true})
+db.students.find()
+db.students.find({status:"A"})
+db.students.find({$or:[{status:"A"},{age:45}]})
+db.students.update({status:"A"},{$inc:{age:3}})
+db.students.update({age:{$gt:30}},{$set:{status:"C"}},{multi:true})
+db.students.find({age:{$gt:40}}).sort({age:1})
+db.students.remove({status:"E"})
+db.students.remove({})
+
+Insert Array of document in nosql database
+
+var mydocuments =
+    [
+      {
+        item: "ABC2",
+        details: { model: "14Q3", manufacturer: "M1 Corporation" },
+        stock: [ { size: "M", qty: 50 } ],
+        category: "clothing"
+      },
+      {
+        item: "MNO2",
+        details: { model: "14Q3", manufacturer: "ABC Company" },
+        stock: [ { size: "S", qty: 5 }, { size: "M", qty: 5 }, { size: "L", qty: 1 } ],
+        category: "clothing"
+      },
+      {
+        item: "IJK2",
+        details: { model: "14Q2", manufacturer: "M5 Corporation" },
+        stock: [ { size: "S", qty: 5 }, { size: "L", qty: 1 } ],
+        category: "houseware"
+      }
+    ];
+
+
+db.inventory.insert( mydocuments );
+
+db.inventory.find( { category: "houseware" } )
+
+
+db.inventory.find({'details.manufacturer':"ABC Company"})
+
+
+db.inventory.update(
+    { item: "MNO2" },
+    {
+      $set: {
+        category: "apparel",
+        details: { model: "14Q3", manufacturer: "XYZ Company" }
+      },
+      $currentDate: { lastModified: true }
+    }
+)
+
+
+db.inventory.update(
+  { item: "ABC1" },
+  { $set: { "details.model": "14Q2" } }
+)
+
+
+db.inventory.update(
+   { item: "TBD1" },
+   {
+     item: "TBD1",
+     details: { "model" : "14Q4", "manufacturer" : "ABC Company" },
+     stock: [ { "size" : "S", "qty" : 25 } ],
+     category: "houseware"
+   },
+   { upsert: true }
+)
+
+
+db.inventory.countDocuments()
+
+db.inventory.countDocuments({'stock.size':"S"})
+
+
+db.inventory.countDocuments({})
+
+db.students.aggregate({$unset:"age"})
+
+----------------
+To remove a filed matches a condition (A query from the class)
+
+db.students.aggregate({$match:{status:'B'}},{$unset:"age"})
+
+-----------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
